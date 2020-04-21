@@ -22,6 +22,8 @@ module.exports = {
         }
         // Dados do email
         const mail = await Mail.findOne({ _id });        
+        if (!mail)
+            return { status: false, info: 'Email não existe' };
 
         // Dados de conexão
         let transporter = nodemailer.createTransport({
