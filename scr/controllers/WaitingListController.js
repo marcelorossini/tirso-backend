@@ -1,5 +1,12 @@
 const axios = require('axios');
+const WaitingList = require('../models/WaitingList');
+
+// Models
 const Course = require('../models/Course');
+const User = require('../models/User');
+
+// Serviços
+const Mailer = require('../services/MailerService');
 
 module.exports = {
     async index(req, res) {
@@ -10,7 +17,7 @@ module.exports = {
         let result = {};
         try {
             // Busca no db
-            result = await Course.find(data)
+            result = await WaitingList.find(data)
         // Error
         } catch (e) {
             result.error = e.message;
@@ -27,7 +34,16 @@ module.exports = {
         let result = {};
         try {
             // Busca no db
-            result = await Course.create(data);
+            result = await WaitingList.create(data);
+            
+            // Dados do usuário
+            const userData = await User.findOne({ _id: result.user });
+            
+            // Dados do curso
+            const courseData = await Course.findOne({ _id: result.course });            
+
+            // Envia email
+            await Mailer.send({ type: 'waitlist', userData, courseData });
         // Error
         } catch (e) {
             result.error = e.message;

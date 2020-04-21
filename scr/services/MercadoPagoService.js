@@ -1,4 +1,5 @@
 // Models
+const Order = require('../models/Order')
 const Course = require('../models/Course');
 const User = require('../models/User');
 
@@ -9,29 +10,32 @@ const mercadopago = require('mercadopago');
 const queryString = require('query-string');
 
 module.exports = {
-    async checkout(req, res) {
+    async checkout(params) {
         // User
-        const { user, course } = req.body;
-
-        // Query String
-        const backUrlQuery = queryString.stringify({ user, course });
+        const { user, course } = params;
 
         // Try
         let result = {};
         try {
             // Dados do usuário
-            const userData = await User.find({ _id: user });
+            const userData = await User.findOne({ _id: user });
             // Verifica se existe
-            if (typeof userData[0] === "undefined")
+            if (!userData)
                 throw {message: 'Usuário não encontrado'};
-            const { name, email } = userData[0];
+            const { name, email } = userData;
             
             // Dados do curso
-            const courseData = await Course.find({ _id: course });
+            const courseData = await Course.findOne({ _id: course });
             // Verifica se existe
-            if (typeof courseData[0] === "undefined")
+            if (!courseData)
                 throw {message: 'Curso não encontrado'};            
-            const { title, price } = courseData[0];
+            const { title, price } = courseData;
+
+            // Cria registro de compra
+            const orderData = await Order.create({ user, course });
+            
+            // Query String
+            const backUrlQuery = queryString.stringify({ order: orderData._id });            
 
             // Configura credenciais
             mercadopago.configure({
@@ -80,7 +84,7 @@ module.exports = {
             result.error = e.message;
         // Return
         } finally {
-            return res.json(result);
+            return result;
         }
     }
 };

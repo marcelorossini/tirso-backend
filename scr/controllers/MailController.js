@@ -1,5 +1,5 @@
 const axios = require('axios');
-const User = require('../models/User');
+const Mail = require('../models/Mail');
 
 module.exports = {
     async index(req, res) {
@@ -10,31 +10,31 @@ module.exports = {
         let result = {};
         try {
             // Busca no db
-            result = await User.find(data);
-        // Error
+            result = await Mail.find(data);
+            // Error
         } catch (e) {
             result.error = e.message;
-        // Return
+            // Return
         } finally {
             return res.json(result);
         }
     },
     async store(req, res) {
-        // Recebe o usuário
+        // Dados requisição
         const data = req.body;
-        const { email } = data;
+        const { title } = data;
 
         // Tenta
         let result = {};
         try {
         // Atualiza/Grava
-            await User.findOneAndUpdate({ email }, data, { upsert: true, new: true, useFindAndModify: false }, (error, doc) => {
+            await Mail.findOneAndUpdate({ title }, data, { upsert: true, new: true, useFindAndModify: false }, (error, doc) => {
                 return res.json(doc);
-            });         
+            });
         // Error
         } catch (e) {
             result.error = e.message;
-            return res.json(result);         
+            return res.json(result);
         }
     }
 };

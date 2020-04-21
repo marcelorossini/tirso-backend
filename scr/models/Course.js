@@ -14,10 +14,22 @@ const CourseSchema = new Schema({
         required: true,
     },    
     video: String,
-    cover: String,
-    url: String,
-    price: Number,
-    release: Boolean,    
+    cover: {
+        type: String,
+        required: true,
+    },
+    url: {
+        type: String,
+        required: true,
+    },    
+    price: {
+        type: Number,
+        required: true,
+    },    
+    release: {
+        type: Boolean,
+        default: false
+    }    
 }, {
     timestamps: true,
 });
