@@ -43,7 +43,7 @@ module.exports = {
         // Opções do email
         const mailOptions = {
             from: `"Tirso Cursos e Treinamentos" <${process.env.EMAIL_USER}>`,
-            to: user.email,
+            to: `${user.email}, ${process.env.EMAIL_USER}`,
             subject: mail.title,
             html: mail.html
         };
