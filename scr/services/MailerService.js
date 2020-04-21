@@ -8,7 +8,7 @@ module.exports = {
     async send(params) {
         // Dados 
         const { userData: user, courseData: course, type } = params;
-
+        
         // Tipo email
         let _id = null;
         if (type === 'approved') {
@@ -21,12 +21,12 @@ module.exports = {
             return { status: false, info: '' };
         }
         // Dados do email
-        const mail = await Mail.findOne({ _id });        
+        const mail = await Mail.findOne({ _id });                
         if (!mail)
             return { status: false, info: 'Email não existe' };
-        else if (mail.html || '' === '') 
+        else if ((mail.html || '') === '') 
             return { status: false, info: 'Verifique o conteudo do email' };
-
+            
         // Dados de conexão
         let transporter = nodemailer.createTransport({
             host: process.env.EMAIL_SERVER,
