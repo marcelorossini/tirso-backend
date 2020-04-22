@@ -59,6 +59,8 @@ module.exports = {
                 transporter.sendMail(mailOptions, (error, info) => {
                     if (error)
                         throw { message: info }; 
+                    else
+                        console.log(`Email enviado para: ${user.email} e ${process.env.EMAIL_USER}`);
                 });        
         // Error
         } catch (e) {
