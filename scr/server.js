@@ -10,6 +10,8 @@ const server = express();
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true
 });
+mongoose.set('debug', true);
+
 server.use(cors());
 server.use(express.json());
 server.use(routes);

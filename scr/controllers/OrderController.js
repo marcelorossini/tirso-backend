@@ -8,6 +8,7 @@ const User = require('../models/User');
 // Seviços
 const MercadoPago = require('../services/MercadoPagoService');
 const Mailer = require('../services/MailerService');
+const { checkErrors } = require('../helpers')
 
 module.exports = {
     async index(req, res) {
@@ -42,7 +43,7 @@ module.exports = {
             // Verifica se existe
             const order = await Order.findOne({ _id });
             if (!order) 
-                throw {message: 'Compra não existe'};
+                throw { message: 'Compra não existe' };
             
             // Grava
             order.collection_id = data.collection_id;
@@ -63,7 +64,8 @@ module.exports = {
             const courseData = await Course.findOne({ _id: order.course });
 
             // Envia email
-            await Mailer.send({ type: 'approved', userData, courseData });
+            const mailReturn = await Mailer.send({ type: 'approved', userData, courseData });
+            checkErrors(mailReturn);
 
             // Retorno
             return res.json({
