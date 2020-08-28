@@ -26,7 +26,14 @@ const CourseSchema = new Schema({
         type: Number,
         required: true,
     },    
+    order: {
+        type: Number
+    },        
     release: {
+        type: Boolean,
+        default: false
+    },    
+    inativ: {
         type: Boolean,
         default: false
     }    

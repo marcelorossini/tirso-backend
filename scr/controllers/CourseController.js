@@ -4,13 +4,14 @@ const Course = require('../models/Course');
 module.exports = {
     async index(req, res) {
         // Dados
-        const data = req.query;
+        const data = { ...req.query, ...({ inativ: false }) };
+        console.log(data);
 
         // Try
         let result = {};
         try {
             // Busca no db
-            result = await Course.find(data)
+            result = await Course.find(data).sort({ order: 1 })
         // Error
         } catch (e) {
             result.error = e.message;
