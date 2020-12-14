@@ -70,7 +70,7 @@ module.exports = {
                             id: "ticket"
                         }
                     ],
-                    installments: 1
+                    installments: 12
                 }
             };
 
